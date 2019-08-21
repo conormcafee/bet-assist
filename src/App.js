@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import styled from "styled-components";
 import { TeamForm } from "./components/TeamForm";
 
-import { form } from "./betTypes";
+import { form, overGoals } from "./betTypes";
 import {
   MOCK_MATCHES_CHAMPIONSHIP,
   MOCK_STANDINGS_CHAMPIONSHIP,
@@ -11,6 +11,8 @@ import {
 } from "./_mock_data";
 
 const App = () => {
+  const [activeTeam, setActiveTeam] = useState("");
+
   const [league, setLeague] = useState("Premier League");
   const [source, setSource] = useState(null);
 
@@ -105,7 +107,7 @@ const App = () => {
           {standings.map((team, index) => (
             <TableRow key={index}>
               <TableCell>
-                <button onClick={() => alert(team.team.name)}>
+                <button onClick={() => setActiveTeam(team.team.name)}>
                   {team.team.name}
                 </button>
               </TableCell>
@@ -120,7 +122,44 @@ const App = () => {
         </Table>
       </Article>
       <Aside>
-        <h2>Data</h2>
+        <h2>Data - {activeTeam}</h2>
+
+        {activeTeam !== "" && (
+          <Fragment>
+            <ul>
+              <li>
+                Home: Over 0.5 Goals:{" "}
+                {overGoals(completedMatches, activeTeam, "HOME", 0.5)}
+              </li>
+              <li>
+                Away: Over 0.5 Goals:{" "}
+                {overGoals(completedMatches, activeTeam, "AWAY", 0.5)}
+              </li>
+            </ul>
+
+            <ul>
+              <li>
+                Home: Over 1.5 Goals:{" "}
+                {overGoals(completedMatches, activeTeam, "HOME", 1.5)}
+              </li>
+              <li>
+                Away: Over 1.5 Goals:{" "}
+                {overGoals(completedMatches, activeTeam, "AWAY", 1.5)}
+              </li>
+            </ul>
+
+            <ul>
+              <li>
+                Home: Over 2.5 Goals:{" "}
+                {overGoals(completedMatches, activeTeam, "HOME", 2.5)}
+              </li>
+              <li>
+                Away: Over 2.5 Goals:{" "}
+                {overGoals(completedMatches, activeTeam, "AWAY", 2.5)}
+              </li>
+            </ul>
+          </Fragment>
+        )}
       </Aside>
     </Flex>
   );
