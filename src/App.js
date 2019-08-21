@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { overGoalsBet } from "./betTypes";
+import { TeamForm } from "./components/TeamForm";
+
+import { overGoals, form } from "./betTypes";
 import {
   MOCK_MATCHES_CHAMPIONSHIP,
   MOCK_STANDINGS_CHAMPIONSHIP,
@@ -15,6 +17,7 @@ const App = () => {
   const [completedMatches, setCompletedMatches] = useState([]);
   const [standings, setStandings] = useState([]);
   const [teams, setTeams] = useState([]);
+  const [teamForm, setTeamForm] = useState([]);
 
   // Results
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -69,15 +72,17 @@ const App = () => {
   useEffect(() => {
     if (selectedTeam && selectedVenue && selectedGoals) {
       setSelectedResults(
-        overGoalsBet(
-          completedMatches,
-          selectedTeam,
-          selectedVenue,
-          selectedGoals
-        )
+        overGoals(completedMatches, selectedTeam, selectedVenue, selectedGoals)
       );
     }
   }, [completedMatches, selectedTeam, selectedGoals, selectedVenue]);
+
+  // Generate Form
+  useEffect(() => {
+    teams.length > 0 &&
+      completedMatches.length > 0 &&
+      setTeamForm(form(teams, completedMatches));
+  }, [teams, completedMatches]);
 
   return (
     <Flex>
@@ -100,6 +105,9 @@ const App = () => {
           <TableRow heading>
             <TableCell heading>Team</TableCell>
             <TableCell heading textAlign="right">
+              Form
+            </TableCell>
+            <TableCell heading textAlign="right">
               GF
             </TableCell>
             <TableCell heading textAlign="right">
@@ -112,6 +120,9 @@ const App = () => {
           {standings.map((team, index) => (
             <TableRow key={index}>
               <TableCell>{team.team.name}</TableCell>
+              <TableCell textAlign="right">
+                <TeamForm team={team.team.name} form={teamForm} />
+              </TableCell>
               <TableCell textAlign="right">{team.goalsFor}</TableCell>
               <TableCell textAlign="right">{team.goalsAgainst}</TableCell>
               <TableCell textAlign="right">{team.points}</TableCell>
