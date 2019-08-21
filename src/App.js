@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { TeamForm } from "./components/TeamForm";
 
-import { overGoals, form } from "./betTypes";
+import { form } from "./betTypes";
 import {
   MOCK_MATCHES_CHAMPIONSHIP,
   MOCK_STANDINGS_CHAMPIONSHIP,
@@ -18,12 +18,6 @@ const App = () => {
   const [standings, setStandings] = useState([]);
   const [teams, setTeams] = useState([]);
   const [teamForm, setTeamForm] = useState([]);
-
-  // Results
-  const [selectedTeam, setSelectedTeam] = useState("");
-  const [selectedVenue, setSelectedVenue] = useState("");
-  const [selectedGoals, setSelectedGoals] = useState("");
-  const [selectedResults, setSelectedResults] = useState(0);
 
   const toggleLeagueData = league => {
     if (league === "Premier League") {
@@ -41,10 +35,6 @@ const App = () => {
 
   useEffect(() => {
     setSource(toggleLeagueData(league));
-    setSelectedTeam("");
-    setSelectedVenue("");
-    setSelectedGoals("");
-    setSelectedResults(0);
   }, [league]);
 
   useEffect(() => {
@@ -69,13 +59,8 @@ const App = () => {
   }, [standings]);
 
   // Calculate Results
-  useEffect(() => {
-    if (selectedTeam && selectedVenue && selectedGoals) {
-      setSelectedResults(
-        overGoals(completedMatches, selectedTeam, selectedVenue, selectedGoals)
-      );
-    }
-  }, [completedMatches, selectedTeam, selectedGoals, selectedVenue]);
+
+  // overGoals(completedMatches, selectedTeam, selectedVenue, selectedGoals)
 
   // Generate Form
   useEffect(() => {
@@ -119,7 +104,11 @@ const App = () => {
           </TableRow>
           {standings.map((team, index) => (
             <TableRow key={index}>
-              <TableCell>{team.team.name}</TableCell>
+              <TableCell>
+                <button onClick={() => alert(team.team.name)}>
+                  {team.team.name}
+                </button>
+              </TableCell>
               <TableCell textAlign="right">
                 <TeamForm team={team.team.name} form={teamForm} />
               </TableCell>
@@ -131,52 +120,7 @@ const App = () => {
         </Table>
       </Article>
       <Aside>
-        <h2>Pick Team</h2>
-        <select
-          value={selectedTeam}
-          onChange={e => setSelectedTeam(e.target.value)}
-        >
-          <option value="">Please Select</option>
-          {teams.map((team, index) => (
-            <option key={index} value={team}>
-              {team}
-            </option>
-          ))}
-        </select>
-
-        <p>- - - - - </p>
-
-        <h2>Home, Away or Both</h2>
-        <select
-          value={selectedVenue}
-          onChange={e => setSelectedVenue(e.target.value)}
-        >
-          <option value="">Please Select</option>
-          <option value="Home">Home</option>
-          <option value="Away">Away</option>
-          <option value="Both">Both</option>
-        </select>
-
-        <p>- - - - - </p>
-
-        <h2>Over x Goals</h2>
-        <select
-          value={selectedGoals}
-          onChange={e => setSelectedGoals(e.target.value)}
-        >
-          <option value="">Please Select</option>
-          <option value={0.5}>Over 0.5</option>
-          <option value={1.5}>Over 1.5</option>
-          <option value={2.5}>Over 2.5</option>
-        </select>
-
-        {selectedTeam && selectedVenue && selectedGoals && (
-          <Results>
-            <span>{selectedTeam}</span> have scored more than{" "}
-            <span>{selectedGoals}</span> goals in <span>{selectedResults}</span>{" "}
-            {selectedResults === 1 ? "game" : "games"} this season.
-          </Results>
-        )}
+        <h2>Data</h2>
       </Aside>
     </Flex>
   );
@@ -277,18 +221,5 @@ const Button = styled.button`
 
   &:focus {
     outline: none;
-  }
-`;
-
-const Results = styled.div`
-  background: #000000;
-  color: white;
-  padding: 1em;
-  border-radius: 1em;
-  margin-top: 2em;
-
-  span {
-    display: inline-block;
-    font-weight: 700;
   }
 `;
