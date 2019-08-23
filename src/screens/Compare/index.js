@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import CompareLayout from "./layout";
 
-import { form } from "../betTypes";
+import { form } from "../../betTypes";
 
 import {
   MOCK_MATCHES_CHAMPIONSHIP,
   MOCK_STANDINGS_CHAMPIONSHIP,
   MOCK_MATCHES_PREMIER_LEAGUE,
   MOCK_STANDINGS_PREMIER_LEAGUE
-} from "../_mock_data";
+} from "../../_mock_data";
 
 const Compare = () => {
   const [activeTeam, setActiveTeam] = useState("");

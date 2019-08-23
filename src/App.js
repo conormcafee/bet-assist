@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { GlobalStyle } from "./assets/style";
-import Compare from "./Compare";
+import Compare from "./screens/Compare";
 
 const App = () => {
   return (

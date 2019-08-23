@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
 import styled from "styled-components";
-import { TeamForm } from "../components/TeamForm";
+import { TeamForm } from "../../components/TeamForm";
 
-import { overGoals } from "../betTypes";
+import { overGoals } from "../../betTypes";
 
 const CompareLayout = ({
   league,
