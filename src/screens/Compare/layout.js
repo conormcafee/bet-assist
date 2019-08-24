@@ -4,7 +4,6 @@ import { Drawer } from "../../components/Drawer";
 import { Results } from "../../components/Results";
 import { TeamForm } from "../../components/TeamForm";
 import styled from "styled-components";
-
 import { overGoals } from "../../betTypes";
 
 const CompareLayout = ({
