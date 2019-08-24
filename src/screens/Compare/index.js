@@ -1,77 +1,117 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import CompareLayout from "./layout";
-
 import { form } from "../../betTypes";
+import * as StatsActions from "../../redux/reducers/stats/statsActions";
 
-import {
-  MOCK_MATCHES_CHAMPIONSHIP,
-  MOCK_STANDINGS_CHAMPIONSHIP,
-  MOCK_MATCHES_PREMIER_LEAGUE,
-  MOCK_STANDINGS_PREMIER_LEAGUE
-} from "../../_mock_data";
-
-const Compare = () => {
+const Compare = ({
+  stats,
+  setPLStandings,
+  setPLMatches,
+  setChampStandings,
+  setChampMatches,
+  setStatsDate
+}) => {
   const [compare, setCompare] = useState(false);
   const [homeTeam, setHomeTeam] = useState(null);
   const [awayTeam, setAwayTeam] = useState(null);
 
-  const [league, setLeague] = useState("Premier League");
+  const [league, setLeague] = useState("premierLeague");
   const [source, setSource] = useState(null);
 
-  const [completedMatches, setCompletedMatches] = useState([]);
-  const [standings, setStandings] = useState([]);
   const [teams, setTeams] = useState([]);
   const [teamForm, setTeamForm] = useState([]);
 
-  const toggleLeagueData = league => {
-    if (league === "Premier League") {
-      return {
-        standings: MOCK_STANDINGS_PREMIER_LEAGUE,
-        matches: MOCK_MATCHES_PREMIER_LEAGUE
-      };
-    } else {
-      return {
-        standings: MOCK_STANDINGS_CHAMPIONSHIP,
-        matches: MOCK_MATCHES_CHAMPIONSHIP
-      };
-    }
+  const fetchStandings = id => {
+    fetch(`https://api.football-data.org/v2/competitions/${id}/standings`, {
+      method: "get",
+      headers: new Headers({
+        "X-Auth-Token": `${process.env.REACT_APP_API_KEY}`
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (id === 2016) {
+          const standings = data.standings[0].table;
+          setChampStandings({
+            loaded: true,
+            data: standings
+          });
+        } else {
+          const standings = data.standings[0].table;
+          setPLStandings({
+            loaded: true,
+            data: standings
+          });
+        }
+        const fetchDate = new Date();
+        setStatsDate(fetchDate);
+      })
+      .catch(error => console.log(error.response));
+  };
+
+  const fetchMatches = id => {
+    fetch(`https://api.football-data.org/v2/competitions/${id}/matches`, {
+      method: "get",
+      headers: new Headers({
+        "X-Auth-Token": `${process.env.REACT_APP_API_KEY}`
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (id === 2016) {
+          const matches = data.matches.filter(
+            match => match.status === "FINISHED"
+          );
+          setChampMatches({
+            loaded: true,
+            data: matches
+          });
+        } else {
+          const matches = data.matches.filter(
+            match => match.status === "FINISHED"
+          );
+          setPLMatches({
+            loaded: true,
+            data: matches
+          });
+        }
+        const fetchDate = new Date();
+        setStatsDate(fetchDate);
+      })
+      .catch(error => console.log(error.response));
   };
 
   useEffect(() => {
-    setSource(toggleLeagueData(league));
-  }, [league]);
+    setSource(league === "premierLeage" ? "championship" : "premierLeague");
 
-  useEffect(() => {
-    if (source !== null) {
-      // Get League Standings
-      setStandings(source.standings.standings[0].table);
-
-      // Get FINISHED matches
-      setCompletedMatches(
-        source.matches.matches.filter(match => match.status === "FINISHED")
-      );
+    if (stats.date === "") {
+      fetchStandings(2021);
+      fetchMatches(2021);
+      fetchStandings(2016);
+      fetchMatches(2016);
+    } else {
+      console.log("Don't fetch");
     }
-  }, [source]);
+  }, []);
 
   // Generate alphabetical list of teams for select dropdown
   useEffect(() => {
-    if (standings.length > 0) {
-      let getTeams = [];
-      standings.map(team => getTeams.push(team.team.name));
-      setTeams(getTeams.sort());
+    if (source !== null) {
+      if (stats[source].length > 0) {
+        let getTeams = [];
+        stats[source].map(team => getTeams.push(team.team.name));
+        setTeams(getTeams.sort());
+      }
     }
-  }, [standings]);
-
-  // Calculate Results
-
-  // overGoals(completedMatches, selectedTeam, selectedVenue, selectedGoals)
+  }, [source, stats]);
 
   // Generate Form
   useEffect(() => {
     teams.length > 0 &&
-      completedMatches.length > 0 &&
-      setTeamForm(form(teams, completedMatches));
-  }, [teams, completedMatches]);
+      stats[source].length > 0 &&
+      setTeamForm(form(teams, stats[source]));
+  }, [source, stats, teams]);
 
   return (
     <CompareLayout
@@ -82,12 +122,40 @@ const Compare = () => {
       awayTeam={awayTeam}
       toggleAwayTeam={awayTeam => setAwayTeam(awayTeam)}
       league={league}
-      completedMatches={completedMatches}
+      standings={
+        source !== null && stats[source].standings.loaded
+          ? stats[source].standings.data
+          : []
+      }
       toggleSetLeague={data => setLeague(data)}
-      standings={standings}
       teamForm={teamForm}
     />
   );
 };
 
-export default Compare;
+const mapStateToProps = state => ({
+  stats: state.stats
+});
+
+const mapDispatchToProps = dispatch => ({
+  setPLStandings: standings => {
+    dispatch(StatsActions.setPLStandings(standings));
+  },
+  setPLMatches: matches => {
+    dispatch(StatsActions.setPLMatches(matches));
+  },
+  setChampStandings: standings => {
+    dispatch(StatsActions.setChampStandings(standings));
+  },
+  setChampMatches: matches => {
+    dispatch(StatsActions.setChampMatches(matches));
+  },
+  setStatsDate: date => {
+    dispatch(StatsActions.setStatsDate(date));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Compare);
