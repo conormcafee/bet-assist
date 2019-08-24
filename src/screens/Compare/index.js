@@ -11,7 +11,9 @@ import {
 } from "../../_mock_data";
 
 const Compare = () => {
-  const [activeTeam, setActiveTeam] = useState("");
+  const [compare, setCompare] = useState(false);
+  const [homeTeam, setHomeTeam] = useState(null);
+  const [awayTeam, setAwayTeam] = useState(null);
 
   const [league, setLeague] = useState("Premier League");
   const [source, setSource] = useState(null);
@@ -73,13 +75,17 @@ const Compare = () => {
 
   return (
     <CompareLayout
+      compare={compare}
+      toggleCompare={data => setCompare(data)}
+      homeTeam={homeTeam}
+      toggleHomeTeam={homeTeam => setHomeTeam(homeTeam)}
+      awayTeam={awayTeam}
+      toggleAwayTeam={awayTeam => setAwayTeam(awayTeam)}
       league={league}
       completedMatches={completedMatches}
       toggleSetLeague={data => setLeague(data)}
       standings={standings}
       teamForm={teamForm}
-      activeTeam={activeTeam}
-      toggleActiveTeam={data => setActiveTeam(data)}
     />
   );
 };

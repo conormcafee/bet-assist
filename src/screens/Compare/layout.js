@@ -1,42 +1,50 @@
 import React, { Fragment } from "react";
-import styled from "styled-components";
+import { Nav } from "../../components/Nav";
+import { Drawer } from "../../components/Drawer";
+import { Results } from "../../components/Results";
 import { TeamForm } from "../../components/TeamForm";
+import styled from "styled-components";
 
 import { overGoals } from "../../betTypes";
 
 const CompareLayout = ({
+  compare,
+  toggleCompare,
   league,
   completedMatches,
   toggleSetLeague,
   standings,
   teamForm,
-  activeTeam,
-  toggleActiveTeam
+  homeTeam,
+  toggleHomeTeam,
+  awayTeam,
+  toggleAwayTeam
 }) => {
-  return (
-    <Flex>
-      <Article>
-        <Header>
-          <h1>{league} 2019/2020</h1>
-          <Button
-            onClick={() =>
-              toggleSetLeague(
-                // setLeague
-                league === "Premier League" ? "Championship" : "Premier League"
-              )
-            }
-          >
-            Switch to{" "}
-            {league === "Premier League" ? "Champtionship" : "Premier League"}
-          </Button>
-        </Header>
+  const setTeam = team => {
+    if (homeTeam === null) {
+      toggleHomeTeam(team);
+    } else if (awayTeam === null) {
+      toggleAwayTeam(team);
+    } else {
+      toggleHomeTeam(null);
+      toggleAwayTeam(null);
+    }
+  };
 
+  return (
+    <Fragment>
+      <Nav
+        league={league}
+        toggleSetLeague={toggleSetLeague}
+        compare={compare}
+        toggleCompare={toggleCompare}
+        canCompare={homeTeam && awayTeam}
+      />
+
+      <Main>
         <Table>
           <TableRow heading>
             <TableCell heading>Team</TableCell>
-            <TableCell heading textAlign="right">
-              Form
-            </TableCell>
             <TableCell heading textAlign="right">
               GF
             </TableCell>
@@ -50,13 +58,9 @@ const CompareLayout = ({
           {standings.map((team, index) => (
             <TableRow key={index}>
               <TableCell>
-                <button onClick={() => toggleActiveTeam(team.team.name)}>
-                  {/* setActiveTeam */}
+                <button onClick={() => setTeam(team.team.name)}>
                   {team.team.name}
                 </button>
-              </TableCell>
-              <TableCell textAlign="right">
-                <TeamForm team={team.team.name} form={teamForm} />
               </TableCell>
               <TableCell textAlign="right">{team.goalsFor}</TableCell>
               <TableCell textAlign="right">{team.goalsAgainst}</TableCell>
@@ -64,82 +68,18 @@ const CompareLayout = ({
             </TableRow>
           ))}
         </Table>
-      </Article>
-      <Aside>
-        <h2>Data - {activeTeam}</h2>
-
-        {activeTeam !== "" && (
-          <Fragment>
-            <ul>
-              <li>
-                Home: Over 0.5 Goals:{" "}
-                {overGoals(completedMatches, activeTeam, "HOME", 0.5)}
-              </li>
-              <li>
-                Away: Over 0.5 Goals:{" "}
-                {overGoals(completedMatches, activeTeam, "AWAY", 0.5)}
-              </li>
-            </ul>
-
-            <ul>
-              <li>
-                Home: Over 1.5 Goals:{" "}
-                {overGoals(completedMatches, activeTeam, "HOME", 1.5)}
-              </li>
-              <li>
-                Away: Over 1.5 Goals:{" "}
-                {overGoals(completedMatches, activeTeam, "AWAY", 1.5)}
-              </li>
-            </ul>
-
-            <ul>
-              <li>
-                Home: Over 2.5 Goals:{" "}
-                {overGoals(completedMatches, activeTeam, "HOME", 2.5)}
-              </li>
-              <li>
-                Away: Over 2.5 Goals:{" "}
-                {overGoals(completedMatches, activeTeam, "AWAY", 2.5)}
-              </li>
-            </ul>
-          </Fragment>
-        )}
-      </Aside>
-    </Flex>
+      </Main>
+      <Drawer isOpen={compare}>
+        <Results team={homeTeam} homeTeam />
+        <Results team={awayTeam} />
+      </Drawer>
+    </Fragment>
   );
 };
 
 export default CompareLayout;
 
-const Flex = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  min-height: 100vh;
-
-  ul {
-    list-style: none;
-    padding-left: 0;
-  }
-
-  h1 {
-    font-size: 1.2rem;
-  }
-
-  @media only screen and (min-width: 768px) {
-    flex-direction: row;
-  }
-`;
-
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const Article = styled.article`
+const Main = styled.main`
   padding: 1em;
   background: #f6f6f6;
   order: 2;
@@ -150,28 +90,15 @@ const Article = styled.article`
   }
 `;
 
-const Aside = styled.aside`
-  padding-top: 1em;
-  padding-right: 1em;
-  padding-bottom: 2em;
-  padding-left: 1em;
-  border-left: 1px solid #e6e6e6;
-  order: 1;
-
-  @media only screen and (max-width: 767px) {
-    border-bottom: 1px solid #e6e6e6;
-  }
-
-  @media only screen and (min-width: 768px) {
-    flex: 1;
-    order: 2;
-  }
-`;
-
 const Table = styled.div`
   display: table;
+  font-size: 0.8rem;
   max-width: 600px;
   border-collapse: collapse;
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  box-shadow: 4px 8px 10px 0px rgba(0, 0, 0, 0.08);
 `;
 
 const TableRow = styled.div`
@@ -185,7 +112,9 @@ const TableCell = styled.div`
   text-align: ${props => props.textAlign};
   padding-top: 0.5em;
   padding-bottom: 0.5em;
-  width: ${props => props.textAlign && `100px`};
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  width: ${props => props.textAlign && `50px`};
 `;
 
 const Button = styled.button`
