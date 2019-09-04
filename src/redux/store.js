@@ -24,9 +24,9 @@ if (process.env.NODE_ENV === "development") {
   middlewares.push(logger);
 }
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 const defaultState = {};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // https://github.com/zalmoxisus/redux-devtools-extension#12-advanced-store-setup
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

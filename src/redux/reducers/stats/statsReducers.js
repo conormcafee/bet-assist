@@ -42,8 +42,6 @@ export default (state = defaultState, action) => {
         date: action.payload
       };
     default:
-      return {
-        ...state
-      };
+      return state;
   }
 };
