@@ -12,14 +12,14 @@ const Nav = ({
   <Navigation>
     <main>
       <Button
-        isActive={league === "Premier League"}
-        onClick={() => toggleSetLeague("Premier League")}
+        isActive={league === "premierLeague"}
+        onClick={() => toggleSetLeague("premierLeague")}
       >
         Premier League
       </Button>
       <Button
-        isActive={league === "Championship"}
-        onClick={() => toggleSetLeague("Championship")}
+        isActive={league === "championship"}
+        onClick={() => toggleSetLeague("championship")}
       >
         Championship
       </Button>

@@ -22,78 +22,85 @@ const Compare = ({
   const [teams, setTeams] = useState([]);
   const [teamForm, setTeamForm] = useState([]);
 
-  const fetchStandings = id => {
-    fetch(`https://api.football-data.org/v2/competitions/${id}/standings`, {
-      method: "get",
-      headers: new Headers({
-        "X-Auth-Token": `${process.env.REACT_APP_API_KEY}`
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (id === 2016) {
-          const standings = data.standings[0].table;
-          setChampStandings({
-            loaded: true,
-            data: standings
-          });
-        } else {
-          const standings = data.standings[0].table;
-          setPLStandings({
-            loaded: true,
-            data: standings
-          });
-        }
-        const fetchDate = new Date();
-        setStatsDate(fetchDate);
-      })
-      .catch(error => console.log(error.response));
-  };
-
-  const fetchMatches = id => {
-    fetch(`https://api.football-data.org/v2/competitions/${id}/matches`, {
-      method: "get",
-      headers: new Headers({
-        "X-Auth-Token": `${process.env.REACT_APP_API_KEY}`
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (id === 2016) {
-          const matches = data.matches.filter(
-            match => match.status === "FINISHED"
-          );
-          setChampMatches({
-            loaded: true,
-            data: matches
-          });
-        } else {
-          const matches = data.matches.filter(
-            match => match.status === "FINISHED"
-          );
-          setPLMatches({
-            loaded: true,
-            data: matches
-          });
-        }
-        const fetchDate = new Date();
-        setStatsDate(fetchDate);
-      })
-      .catch(error => console.log(error.response));
-  };
-
   useEffect(() => {
-    setSource(league === "premierLeage" ? "championship" : "premierLeague");
+    const fetchStandings = id => {
+      fetch(`https://api.football-data.org/v2/competitions/${id}/standings`, {
+        method: "get",
+        headers: new Headers({
+          "X-Auth-Token": `${process.env.REACT_APP_API_KEY}`
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (id === 2016) {
+            const standings = data.standings[0].table;
+            setChampStandings({
+              loaded: true,
+              data: standings
+            });
+          } else {
+            const standings = data.standings[0].table;
+            setPLStandings({
+              loaded: true,
+              data: standings
+            });
+          }
+          const fetchDate = new Date();
+          setStatsDate(fetchDate);
+        })
+        .catch(error => console.log(error.response));
+    };
+
+    const fetchMatches = id => {
+      fetch(`https://api.football-data.org/v2/competitions/${id}/matches`, {
+        method: "get",
+        headers: new Headers({
+          "X-Auth-Token": `${process.env.REACT_APP_API_KEY}`
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (id === 2016) {
+            const matches = data.matches.filter(
+              match => match.status === "FINISHED"
+            );
+            setChampMatches({
+              loaded: true,
+              data: matches
+            });
+          } else {
+            const matches = data.matches.filter(
+              match => match.status === "FINISHED"
+            );
+            setPLMatches({
+              loaded: true,
+              data: matches
+            });
+          }
+          const fetchDate = new Date();
+          setStatsDate(fetchDate);
+        })
+        .catch(error => console.log(error.response));
+    };
 
     if (stats.date === "") {
       fetchStandings(2021);
       fetchMatches(2021);
       fetchStandings(2016);
       fetchMatches(2016);
-    } else {
-      console.log("Don't fetch");
     }
-  }, []);
+  }, [
+    stats.date,
+    setChampMatches,
+    setPLMatches,
+    setChampStandings,
+    setPLStandings,
+    setStatsDate
+  ]);
+
+  useEffect(() => {
+    setSource(league);
+  }, [league]);
 
   // Generate alphabetical list of teams for select dropdown
   useEffect(() => {
