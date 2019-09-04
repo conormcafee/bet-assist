@@ -102,7 +102,9 @@ const Compare = ({
     setSource(league);
   }, [league]);
 
-  // Generate alphabetical list of teams for select dropdown
+  /*  Generate alphabetical list of teams for select dropdown, 
+      this teams array is then used within the "form" function
+  */
   useEffect(() => {
     if (source !== null) {
       if (stats[source].length > 0) {
