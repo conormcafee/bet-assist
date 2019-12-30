@@ -4,6 +4,11 @@ import {
   setPLMatches,
   setStatsDate
 } from "../redux/reducers/data/actions";
+import {
+  setPLNextGameweekFixtures,
+  setChampNextGameweekFixtures
+} from "../redux/reducers/nextGameweek/actions";
+import { nextGameweek } from "../utils";
 
 const apiRest = ({ dispatch, getState }) => next => action => {
   if (action.type !== API_REST) {
@@ -44,6 +49,7 @@ const apiRest = ({ dispatch, getState }) => next => action => {
                 data: matches
               })
             );
+            dispatch(setChampNextGameweekFixtures(nextGameweek(matches)));
           } else {
             const matches = data.matches;
             dispatch(
@@ -52,6 +58,7 @@ const apiRest = ({ dispatch, getState }) => next => action => {
                 data: matches
               })
             );
+            dispatch(setPLNextGameweekFixtures(nextGameweek(matches)));
           }
           const fetchDate = new Date();
           dispatch(setStatsDate(fetchDate));

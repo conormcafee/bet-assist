@@ -1,3 +1,1 @@
-import nextGameweek from "./nextGameweek";
-
-export { nextGameweek };
+export { nextGameweek } from "./nextGameweek";

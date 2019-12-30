@@ -11,7 +11,7 @@ const persistConfig = {
   key: "betAssist",
   storage,
   stateReconciler: autoMergeLevel2,
-  whitelist: ["data"],
+  whitelist: ["data", "nextGameweek"],
   blacklist: []
 };
 
