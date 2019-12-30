@@ -4,11 +4,8 @@ import Fixtures from "../Fixtures";
 const NextGameweekLayout = ({ premierLeague, championship }) => {
   return (
     <Fragment>
-      <h3>Premier League</h3>
-      <Fixtures matches={premierLeague} />
-
-      <h3>Championship</h3>
-      <Fixtures matches={championship} />
+      <Fixtures title="Premier League" matches={premierLeague} />
+      <Fixtures title="Championship" matches={championship} />
     </Fragment>
   );
 };
