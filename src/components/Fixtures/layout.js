@@ -4,7 +4,7 @@ import GoalsIndictor from "../GoalsIndicator";
 const FixturesLayout = ({ title, matches, pastMatches }) => (
   <Fragment>
     <h3>{title}</h3>
-    <ul>
+    <ul className="w-full max-w-md bg-gray-200">
       {matches.map((match, index) => (
         <li key={index}>
           <GoalsIndictor

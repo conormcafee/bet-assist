@@ -1,12 +1,6 @@
-import React, { Fragment } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
+import "./styles/tailwind.css";
 import App from "./App";
-import { Normalize } from "styled-normalize";
 
-ReactDOM.render(
-  <Fragment>
-    <Normalize />
-    <App />
-  </Fragment>,
-  document.getElementById("root")
-);
+ReactDOM.render(<App />, document.getElementById("root"));
