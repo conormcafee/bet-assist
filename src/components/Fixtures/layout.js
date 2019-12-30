@@ -24,12 +24,14 @@ const FixturesLayout = ({ title, matches, pastMatches }) => (
               pastMatches={pastMatches}
               team={match.homeTeam.id}
               type="both"
+              isHomeTeam={true}
             />
             <span className="text-xs px-2 font-light">vs</span>
             <GoalsIndictor
               pastMatches={pastMatches}
               team={match.awayTeam.id}
               type="both"
+              isHomeTeam={false}
             />
           </div>
           <TeamName

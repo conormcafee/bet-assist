@@ -14,13 +14,18 @@ const HomeLayout = () => (
       </p>
 
       <p className="text-xs mb-2">
-        The number in brackets beside the team name indicates the amount of Home
-        or Away games the team has a scored at least 1 goal.
+        The number in brackets beside the team name indicates the amount of{" "}
+        <span className="font-semibold">Home</span> or{" "}
+        <span className="font-semibold">Away</span> games that team has a scored
+        at least 1 goal (or more).
       </p>
 
       <p className="text-xs mb-2">
-        The number in the green circle is the amount of games the Home or Away
-        team has been BTTS to score when playing at Home or Away
+        The number in the green box is the amount of games the{" "}
+        <span className="font-semibold">Home</span> or{" "}
+        <span className="font-semibold">Away</span> team was involved in a BTTS
+        match whilst playing at <span className="font-semibold">Home</span> or{" "}
+        <span className="font-semibold">Away</span>
       </p>
     </header>
     <NextGameweek />
