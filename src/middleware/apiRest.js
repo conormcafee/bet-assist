@@ -8,7 +8,7 @@ import {
   setPLNextGameweekFixtures,
   setChampNextGameweekFixtures
 } from "../redux/reducers/nextGameweek/actions";
-import { nextGameweek } from "../utils";
+import { matchData, nextGameweek } from "../utils";
 
 const apiRest = ({ dispatch, getState }) => next => action => {
   if (action.type !== API_REST) {
@@ -43,22 +43,22 @@ const apiRest = ({ dispatch, getState }) => next => action => {
         .then(data => {
           if (id === 2016) {
             const matches = data.matches;
+            dispatch(setChampNextGameweekFixtures(nextGameweek(matches)));
             dispatch(
               setChampMatches({
                 loaded: true,
-                data: matches
+                data: matchData(matches)
               })
             );
-            dispatch(setChampNextGameweekFixtures(nextGameweek(matches)));
           } else {
             const matches = data.matches;
+            dispatch(setPLNextGameweekFixtures(nextGameweek(matches)));
             dispatch(
               setPLMatches({
                 loaded: true,
-                data: matches
+                data: matchData(matches)
               })
             );
-            dispatch(setPLNextGameweekFixtures(nextGameweek(matches)));
           }
           const fetchDate = new Date();
           dispatch(setStatsDate(fetchDate));
