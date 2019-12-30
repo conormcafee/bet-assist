@@ -1,25 +1,14 @@
 import React, { Fragment } from "react";
+import Fixtures from "../Fixtures";
 
 const NextGameweekLayout = ({ premierLeague, championship }) => {
   return (
     <Fragment>
       <h3>Premier League</h3>
-      <ul>
-        {premierLeague.map((match, index) => (
-          <li key={index}>
-            {match.homeTeam.name} vs {match.awayTeam.name}
-          </li>
-        ))}
-      </ul>
+      <Fixtures matches={premierLeague} />
 
       <h3>Championship</h3>
-      <ul>
-        {championship.map((match, index) => (
-          <li key={index}>
-            {match.homeTeam.name} vs {match.awayTeam.name}
-          </li>
-        ))}
-      </ul>
+      <Fixtures matches={championship} />
     </Fragment>
   );
 };

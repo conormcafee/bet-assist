@@ -3,7 +3,7 @@ import NextGameweek from "../../components/NextGameweek";
 
 const HomeLayout = () => (
   <Fragment>
-    <h1>Home</h1>
+    <h1>Bet Assist</h1>
     <NextGameweek />
   </Fragment>
 );
