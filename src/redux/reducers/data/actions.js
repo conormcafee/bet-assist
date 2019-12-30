@@ -1,4 +1,5 @@
 import * as Types from "./types";
+import { API_REST } from "../../types";
 
 export const defaultState = {
   premierLeague: {
@@ -25,6 +26,14 @@ export const defaultState = {
 };
 
 /* Action Creators */
+
+export const getMatches = id => ({
+  type: API_REST,
+  payload: {
+    label: "getMatches",
+    id: id
+  }
+});
 
 export const resetStatsData = () => {
   return {

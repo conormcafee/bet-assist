@@ -2,6 +2,8 @@ import { applyMiddleware, compose, createStore } from "redux";
 import { createLogger } from "redux-logger";
 import { persistReducer } from "redux-persist";
 import { autoMergeLevel2 } from "redux-persist/lib/stateReconciler/autoMergeLevel2";
+import ReduxThunk from "redux-thunk";
+import apiRest from "../middleware/apiRest";
 import storage from "redux-persist/lib/storage";
 import rootReducer from "./reducers";
 
@@ -9,19 +11,18 @@ const persistConfig = {
   key: "betAssist",
   storage,
   stateReconciler: autoMergeLevel2,
-  whitelist: ["stats"],
+  whitelist: ["data"],
   blacklist: []
 };
 
-const middlewares = [];
+const middleware = [ReduxThunk, apiRest];
 
-// Add logging on in development only
 if (process.env.NODE_ENV === "development") {
   const logger = createLogger({
     collapsed: true,
     duration: true
   });
-  middlewares.push(logger);
+  middleware.push(logger);
 }
 
 const defaultState = {};
@@ -34,5 +35,5 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 export default createStore(
   persistedReducer,
   defaultState,
-  composeEnhancers(applyMiddleware(...middlewares))
+  composeEnhancers(applyMiddleware(...middleware))
 );

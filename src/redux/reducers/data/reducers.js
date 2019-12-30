@@ -1,4 +1,4 @@
-import { defaultState } from "./statsActions";
+import { defaultState } from "./actions";
 import * as Types from "./types";
 
 export default (state = defaultState, action) => {
