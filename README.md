@@ -5,9 +5,9 @@ This project is aimed at assiting football betting choices for those who enjot a
 ## Stack
 
 - React
-- Redux (Coming Soon)
-- Styled Components
-- Styled System (Coming Soon)
+- Redux
+- Redux Middleware
+- Tailwind CSS
 - ES6
 - Netlify
 
