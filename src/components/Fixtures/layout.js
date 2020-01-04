@@ -3,7 +3,7 @@ import GoalsIndictor from "../GoalsIndicator";
 import { TeamName } from "./components";
 
 const FixturesLayout = ({ title, matches, pastMatches }) => (
-  <section className="max-w-lg mx-auto mb-8 shadow-md">
+  <section className="mb-8 shadow-md">
     <h3 className="bg-green-500 font-semibold text-sm text-white p-2 border-b-2 border-green-600 rounded-t-sm">
       {title}
     </h3>

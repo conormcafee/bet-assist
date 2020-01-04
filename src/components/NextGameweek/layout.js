@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Fixtures from "../Fixtures";
 
 const NextGameweekLayout = ({
@@ -8,7 +8,7 @@ const NextGameweekLayout = ({
   pastChampionship
 }) => {
   return (
-    <Fragment>
+    <section className="flex-1">
       <Fixtures
         title="Premier League"
         matches={premierLeague}
@@ -19,7 +19,7 @@ const NextGameweekLayout = ({
         matches={championship}
         pastMatches={pastChampionship}
       />
-    </Fragment>
+    </section>
   );
 };
 

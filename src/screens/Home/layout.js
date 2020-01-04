@@ -1,8 +1,9 @@
 import React from "react";
 import NextGameweek from "../../components/NextGameweek";
+import Results from "../../components/Results";
 
 const HomeLayout = () => (
-  <div className="bg-gray-200 text-gray-600 p-4 antialiased">
+  <div className="bg-gray-800 text-gray-200 p-4 antialiased">
     <header className="max-w-lg mx-auto  mb-6">
       <h1 className="mb-2">
         <span className="text-lg font-semibold">Bet Assist</span>
@@ -28,7 +29,11 @@ const HomeLayout = () => (
         <span className="font-semibold">Away</span>
       </p>
     </header>
-    <NextGameweek />
+    <main className="flex">
+      <Results homeResults={true} awayResults={false} />
+      <NextGameweek />
+      <Results homeResults={false} awayResults={true} />
+    </main>
   </div>
 );
 
